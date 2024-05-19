@@ -1,5 +1,6 @@
 package br.com.fiapmsprodutos.infrastructure.database.service;
 
+import br.com.fiapmsprodutos.domain.entity.ProdutoDomainEntity;
 import br.com.fiapmsprodutos.infrastructure.database.entity.ProdutoEntity;
 import br.com.fiapmsprodutos.infrastructure.database.repository.ProdutoRepository;
 import org.assertj.core.api.Assertions;
@@ -40,6 +41,34 @@ class ProdutoDomainServiceTest {
         Assertions.assertThat(produtos.get(0).getDescription()).isEqualTo("Descrição do Produto 1");
         Assertions.assertThat(produtos.get(0).getPrice()).isEqualTo(10.0);
         Assertions.assertThat(produtos.get(0).getQuantity()).isEqualTo(10);
+    }
+
+    @Test
+    void deveBuscarProdutoPorId() {
+        // Arrange
+        final var produtoEntidade = criarProdutoEntity();
+        Mockito.when(produtoRepository.findById(1L)).thenReturn(java.util.Optional.of(produtoEntidade));
+
+        // Act
+        final var produto = produtoDomainService.buscarProdutoPorId(criarProdutosDomainEntity());
+
+        // Assert
+        Assertions.assertThat(produto).isNotNull();
+        Assertions.assertThat(produto.getId()).isEqualTo(1L);
+        Assertions.assertThat(produto.getName()).isEqualTo("Produto 1");
+        Assertions.assertThat(produto.getDescription()).isEqualTo("Descrição do Produto 1");
+        Assertions.assertThat(produto.getPrice()).isEqualTo(10.0);
+        Assertions.assertThat(produto.getQuantity()).isEqualTo(10);
+    }
+
+    private ProdutoDomainEntity criarProdutosDomainEntity() {
+        return ProdutoDomainEntity.builder()
+                .id(1L)
+                .name("Produto 1")
+                .description("Descrição 1")
+                .price(10.0)
+                .quantity(10)
+                .build();
     }
 
     private ProdutoEntity criarProdutoEntity() {
