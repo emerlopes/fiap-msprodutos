@@ -27,7 +27,7 @@ public class ProdutoSchedule {
         this.job = job;
     }
 
-    @Scheduled(cron = "0/10 * * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     public void executarJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
 
         System.out.println("Executando job de importação de produtos");
