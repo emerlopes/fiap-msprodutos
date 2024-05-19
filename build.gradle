@@ -47,6 +47,15 @@ dependencies {
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
+
+    testImplementation "io.cucumber:cucumber-java:$cucumberVersion"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:$cucumberVersion"
+
+    testImplementation group: 'org.junit.platform', name: 'junit-platform-suite', version: junitPlatformSuiteVersion
+
+    testImplementation("io.rest-assured:rest-assured:$restAssuredVersion") {
+        exclude group: 'org.codehaus.jackson', module: 'jackson-mapper-asl'
+    }
 }
 
 tasks.named('test') {
