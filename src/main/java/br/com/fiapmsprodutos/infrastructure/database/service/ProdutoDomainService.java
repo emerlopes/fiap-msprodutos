@@ -32,4 +32,24 @@ public class ProdutoDomainService implements ProdutoDomainRepository {
         return ProdutoDomainEntity.paraEntidadeDominio(produtoEntity.get());
 
     }
+
+    @Override
+    public ProdutoDomainEntity atualizarProduto(ProdutoDomainEntity produto) {
+        final var irProduto = produto.getId();
+        final var produtoEntity = produtoRepository.findById(irProduto);
+
+        if (produtoEntity.isEmpty()) {
+            throw new BusinessException("Produto não encontrado");
+        }
+
+        final var quantidadeEstoque = produtoEntity.get().getQuantity();
+        final var quantidadeVendida = produto.getQuantity();
+        final var quantidadeAtualizada = quantidadeEstoque - quantidadeVendida;
+
+        produtoEntity.get().setQuantity(quantidadeAtualizada);
+
+        final var produtoEntityAtualizado = produtoRepository.save(produtoEntity.get());
+
+        return ProdutoDomainEntity.paraEntidadeDominio(produtoEntityAtualizado);
+    }
 }

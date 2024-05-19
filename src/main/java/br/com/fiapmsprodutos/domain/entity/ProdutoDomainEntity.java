@@ -1,5 +1,7 @@
 package br.com.fiapmsprodutos.domain.entity;
 
+import br.com.fiapmsprodutos.application.entrypoint.controller.ProdutoRequestDTO;
+import br.com.fiapmsprodutos.application.entrypoint.controller.ProdutoResponseDTO;
 import br.com.fiapmsprodutos.infrastructure.database.entity.ProdutoEntity;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,27 @@ public class ProdutoDomainEntity {
     }
 
     public static ProdutoDomainEntity paraEntidadeDominio(
+            final ProdutoRequestDTO produtoRequestDTO, Long idProduto
+    ) {
+        return ProdutoDomainEntity.builder()
+                .id(idProduto)
+                .quantity(produtoRequestDTO.getQuantidadeSolicitada())
+                .build();
+    }
+
+    public static ProdutoResponseDTO paraDTO(
+            final ProdutoDomainEntity produtoDomainEntity
+    ) {
+        return ProdutoResponseDTO.builder()
+                .id(produtoDomainEntity.getId())
+                .nome(produtoDomainEntity.getName())
+                .descricao(produtoDomainEntity.getDescription())
+                .preco(produtoDomainEntity.getPrice())
+                .quantidade(produtoDomainEntity.getQuantity())
+                .build();
+    }
+
+    public static ProdutoDomainEntity paraEntidadeDominio(
             final String idProduto
     ) {
         return ProdutoDomainEntity.builder()
@@ -50,4 +73,25 @@ public class ProdutoDomainEntity {
                 .build();
     }
 
+    public static ProdutoEntity paraEntidade(
+            final ProdutoDomainEntity produtoDomainEntity
+    ) {
+        return new ProdutoEntity()
+                .setId(produtoDomainEntity.getId())
+                .setName(produtoDomainEntity.getName())
+                .setDescription(produtoDomainEntity.getDescription())
+                .setPrice(produtoDomainEntity.getPrice())
+                .setQuantity(produtoDomainEntity.getQuantity());
+    }
+
+    @Override
+    public String toString() {
+        return "ProdutoDomainEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", price=" + price +
+                ", quantity=" + quantity +
+                '}';
+    }
 }

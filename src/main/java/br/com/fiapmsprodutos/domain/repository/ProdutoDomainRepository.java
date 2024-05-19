@@ -9,4 +9,6 @@ public interface ProdutoDomainRepository {
     List<ProdutoDomainEntity> buscarProdutos();
 
     ProdutoDomainEntity buscarProdutoPorId(ProdutoDomainEntity produto);
+
+    ProdutoDomainEntity atualizarProduto(ProdutoDomainEntity produto);
 }

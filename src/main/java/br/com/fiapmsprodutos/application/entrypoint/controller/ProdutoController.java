@@ -3,6 +3,8 @@ package br.com.fiapmsprodutos.application.entrypoint.controller;
 import br.com.fiapmsprodutos.domain.entity.ProdutoDomainEntity;
 import br.com.fiapmsprodutos.domain.usecase.BuscarProdutoPorIdUseCase;
 import br.com.fiapmsprodutos.domain.usecase.BuscarProdutosUseCase;
+import br.com.fiapmsprodutos.domain.usecase.impl.AtualizarProdutoPorIdUseCaseImpl;
+import org.slf4j.Logger;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
@@ -27,16 +29,24 @@ public class ProdutoController {
 
     private final BuscarProdutoPorIdUseCase buscarProdutoPorIdUseCase;
 
+    private final AtualizarProdutoPorIdUseCaseImpl atualizarProdutoPorIdUseCase;
+
+    private final Logger logger;
+
     public ProdutoController(
             final JobLauncher jobLauncher,
             final Job job,
             final BuscarProdutosUseCase buscarProdutosUseCase,
-            final BuscarProdutoPorIdUseCase buscarProdutoPorIdUseCase
+            final BuscarProdutoPorIdUseCase buscarProdutoPorIdUseCase,
+            final AtualizarProdutoPorIdUseCaseImpl atualizarProdutoPorIdUseCase,
+            final Logger logger
     ) {
         this.jobLauncher = jobLauncher;
         this.job = job;
         this.buscarProdutosUseCase = buscarProdutosUseCase;
         this.buscarProdutoPorIdUseCase = buscarProdutoPorIdUseCase;
+        this.atualizarProdutoPorIdUseCase = atualizarProdutoPorIdUseCase;
+        this.logger = logger;
     }
 
     @PostMapping("/jobs")
@@ -59,14 +69,34 @@ public class ProdutoController {
         return buscarProdutosUseCase.execute();
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<ProdutoDomainEntity> buscarProdutoPorId(
+    @GetMapping("/{id}")
+    public ResponseEntity<ProdutoResponseDTO> buscarProdutoPorId(
             @PathVariable("id") final String produto
     ) {
+        logger.info("Requisição para buscar produto por id: {}", produto);
+
         final var entidadeDominioRequest = ProdutoDomainEntity.paraEntidadeDominio(produto);
         final var entidadeDominiuResponse = buscarProdutoPorIdUseCase.execute(entidadeDominioRequest);
 
-        return ResponseEntity.status(HttpStatus.OK).body(entidadeDominiuResponse);
+        logger.info("Produto encontrado: {}", entidadeDominiuResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ProdutoDomainEntity.paraDTO(entidadeDominiuResponse));
+    }
+
+    @PostMapping("atualizar/{idProduto}")
+    public ResponseEntity<?> atualizarEstoqueProduto(
+            @PathVariable("idProduto") final Long idProduto,
+            @RequestBody final ProdutoRequestDTO produtoRequestDTO
+    ) {
+        logger.info("Requisição para atualizar estoque do produto: {}", idProduto);
+
+        final var entidadeDominioRequest = ProdutoDomainEntity.paraEntidadeDominio(produtoRequestDTO, idProduto);
+
+        final var entidadeDominioResponse = atualizarProdutoPorIdUseCase.execute(entidadeDominioRequest);
+
+        logger.info("Estoque atualizado: {}", entidadeDominioResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(ProdutoDomainEntity.paraDTO(entidadeDominioResponse));
     }
 
 
