@@ -1,7 +1,7 @@
 package br.com.fiapmsprodutos.application.entrypoint.controller;
 
 import br.com.fiapmsprodutos.domain.entity.ProdutoDomainEntity;
-import br.com.fiapmsprodutos.domain.usecase.BuscarProdutoUseCase;
+import br.com.fiapmsprodutos.domain.usecase.BuscarProdutosUseCase;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,13 +34,13 @@ class ProdutoControllerTest {
     private Job job;
 
     @Mock
-    private BuscarProdutoUseCase buscarProdutoUseCase;
+    private BuscarProdutosUseCase buscarProdutosUseCase;
 
     @Test
     void deveExecutarJob() throws JobInstanceAlreadyCompleteException, JobExecutionAlreadyRunningException, JobParametersInvalidException, JobRestartException {
         // Configuração do mock do UseCase para retornar uma lista de produtos
         List<ProdutoDomainEntity> produtosEsperados = criarProdutos();
-        when(buscarProdutoUseCase.execute()).thenReturn(produtosEsperados);
+        when(buscarProdutosUseCase.execute()).thenReturn(produtosEsperados);
 
         // Configuração do mock do JobLauncher para retornar um JobExecution COMPLETED
         JobExecution jobExecution = new JobExecution(1L);

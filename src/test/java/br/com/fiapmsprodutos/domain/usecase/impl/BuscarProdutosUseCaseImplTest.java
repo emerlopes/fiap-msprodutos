@@ -12,13 +12,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @ExtendWith(MockitoExtension.class)
-class BuscarProdutoUseCaseImplTest {
+class BuscarProdutosUseCaseImplTest {
 
     @InjectMocks
-    BuscarProdutoUseCaseImpl buscarProdutoUseCase;
+    BuscarProdutosUseCaseImpl buscarProdutoUseCase;
 
     @Mock
     ProdutoDomainRepository produtoDomainRepository;

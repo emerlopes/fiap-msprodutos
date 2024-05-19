@@ -1,13 +1,12 @@
 package br.com.fiapmsprodutos.application.entrypoint.controller;
 
 import br.com.fiapmsprodutos.domain.entity.ProdutoDomainEntity;
-import br.com.fiapmsprodutos.domain.usecase.BuscarProdutoUseCase;
+import br.com.fiapmsprodutos.domain.usecase.BuscarProdutosUseCase;
 import org.springframework.batch.core.*;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobExecutionAlreadyRunningException;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.batch.core.repository.JobRestartException;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Calendar;
@@ -21,16 +20,16 @@ public class ProdutoController {
 
     private final Job job;
 
-    private final BuscarProdutoUseCase buscarProdutoUseCase;
+    private final BuscarProdutosUseCase buscarProdutosUseCase;
 
     public ProdutoController(
             final JobLauncher jobLauncher,
             final Job job,
-            final BuscarProdutoUseCase buscarProdutoUseCase
+            final BuscarProdutosUseCase buscarProdutosUseCase
     ) {
         this.jobLauncher = jobLauncher;
         this.job = job;
-        this.buscarProdutoUseCase = buscarProdutoUseCase;
+        this.buscarProdutosUseCase = buscarProdutosUseCase;
     }
 
     @PostMapping("/jobs")
@@ -50,7 +49,7 @@ public class ProdutoController {
             }
         }
 
-        return buscarProdutoUseCase.execute();
+        return buscarProdutosUseCase.execute();
     }
 
 
