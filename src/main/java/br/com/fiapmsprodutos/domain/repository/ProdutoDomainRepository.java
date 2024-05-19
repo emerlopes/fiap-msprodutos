@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ProdutoDomainRepository {
     List<ProdutoDomainEntity> buscarProdutos();
+
+    ProdutoDomainEntity buscarProdutoPorId(ProdutoDomainEntity produto);
 }

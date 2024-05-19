@@ -30,4 +30,24 @@ public class ProdutoDomainEntity {
                 .toList();
     }
 
+    public static ProdutoDomainEntity paraEntidadeDominio(
+            final String idProduto
+    ) {
+        return ProdutoDomainEntity.builder()
+                .id(Long.parseLong(idProduto))
+                .build();
+    }
+
+    public static ProdutoDomainEntity paraEntidadeDominio(
+            final ProdutoEntity produtoEntity
+    ) {
+        return ProdutoDomainEntity.builder()
+                .id(produtoEntity.getId())
+                .name(produtoEntity.getName())
+                .description(produtoEntity.getDescription())
+                .price(produtoEntity.getPrice())
+                .quantity(produtoEntity.getQuantity())
+                .build();
+    }
+
 }
